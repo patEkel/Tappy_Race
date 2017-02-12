@@ -8,26 +8,40 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Tappy_Race extends ApplicationAdapter {
 	SpriteBatch batch;
-	Texture img;
+	Texture background;
+	Texture badLog;
+	Texture finish;
+	int state=1;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		background = new Texture("road_into.jpg");
+		badLog = new Texture("badlogic.jpg");
+		finish = new Texture("finish_removed.jpg");
+
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		batch.draw(img, 0, 0);
+		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(finish, 200, 200, Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight()/10);
+
 		batch.end();
+		if (state == 1){
+
+		}
+
+	//	birds = new Texture[2];
+	//	birds[0] = new Texture("bird.png");
+	//	birds[1] = new Texture("bird2.png");
+	//	birdY = Gdx.graphics.getHeight() / 2 - birds[0].getHeight() / 2;
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
+	//	img.dispose();
 	}
 }
