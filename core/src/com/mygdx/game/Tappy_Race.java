@@ -15,10 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -38,16 +36,11 @@ public class Tappy_Race extends ApplicationAdapter {
 	float finishLine, finishDistance;
 	float width, height, carWidth, carHeight;
 	private Stage stage;
-	Drawable blueDraw, yellowDraw, greenDraw, purpleDraw, backG;
-	ImageButton blueCarButton, yellowCarButton, greenCarButton, purpleCarButton;
-	Skin skin;
-	Skin back;
+	Skin skin, blueSkin, orangeSkin;
 	Actor backGroundSkin;
-	SelectBox dropDown;
 	Batch backBatch;
 	TextButton newGameButton;
-	TextButton quitGameButton;
-
+	TextButton quitGameButton, orangeCarButton, blueCarButton, yellowCarButton, greenCarButton, purpleCarButton;
 	@Override
 	public void create() {
 		inPreRace = false;
@@ -80,21 +73,26 @@ public class Tappy_Race extends ApplicationAdapter {
 		deltaY = 0;
 		finishLine = Gdx.graphics.getHeight()/2;
 		stage = new Stage(new ScreenViewport());
-
 		// Add UI elements to screen
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);// Make the stage consume events
 		createBasicSkin();
-		 newGameButton = new TextButton("New game", skin); // Use the initialized skin
-		 quitGameButton = new TextButton("Quit", skin); // Use the initialized skin
+		newGameButton = new TextButton("New game", skin); // Use the initialized skin
+		quitGameButton = new TextButton("Quit", skin); // Use the initialized skin
+		orangeCarButton = new TextButton("", skin);
+		blueCarButton = new TextButton("", skin);
 		Image b = new Image(background);
 		b.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
 		newGameButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2);
 		quitGameButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8-newGameButton.getWidth() - Gdx.graphics.getWidth()/12, Gdx.graphics.getHeight()/2);
+		orangeCarButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8-orangeCarButton.getWidth() - Gdx.graphics.getWidth()/16, Gdx.graphics.getHeight()/2.5f);
+		blueCarButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8+blueCarButton.getWidth() - Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight()/2.5f);
 		stage.addActor(b);
 		stage.addActor(newGameButton);
 		stage.addActor(quitGameButton);
-		stage.addActor(dropDown);
+		stage.addActor(orangeCarButton);
+		stage.addActor(blueCarButton);
 		addActionListeners();
 	}
 
@@ -104,15 +102,13 @@ public class Tappy_Race extends ApplicationAdapter {
 		BitmapFont font = new BitmapFont();
 		skin = new Skin();
 		skin.add("default", font);
-		back = new Skin();
-		skin.add("default", font);
+
 		//Create a texture
-		Pixmap pixmap = new Pixmap((int) Gdx.graphics.getWidth() / 4, (int) Gdx.graphics.getHeight() / 10, Pixmap.Format.RGB888);
+		Pixmap pixmap = new Pixmap((int) Gdx.graphics.getWidth() / 6, (int) Gdx.graphics.getHeight() / 14, Pixmap.Format.RGB888);
 		pixmap.setColor(Color.WHITE);
 
 		pixmap.fill();
 		skin.add("background", new Texture(pixmap));
-		back.add("back", background);
 		//Create a button style
 		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
 		textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
@@ -120,8 +116,8 @@ public class Tappy_Race extends ApplicationAdapter {
 		textButtonStyle.checked = skin.newDrawable("background", Color.DARK_GRAY);
 		textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
 		textButtonStyle.font = skin.getFont("default");
-		skin.add("default", textButtonStyle);
 
+		skin.add("default", textButtonStyle);
 	}
 
 
