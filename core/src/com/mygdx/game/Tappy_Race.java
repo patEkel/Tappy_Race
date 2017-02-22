@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
@@ -16,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -35,11 +38,12 @@ public class Tappy_Race extends ApplicationAdapter {
 	float finishLine, finishDistance;
 	float width, height, carWidth, carHeight;
 	private Stage stage;
-	Skin skin, blueSkin, orangeSkin;
+	Skin skin;
 	Actor backGroundSkin;
 	Batch backBatch;
 	TextButton newGameButton;
 	TextButton quitGameButton, orangeCarButton, blueCarButton, yellowCarButton, greenCarButton, purpleCarButton;
+	Sprite green;
 	@Override
 	public void create() {
 		inPreRace = false;
@@ -78,19 +82,24 @@ public class Tappy_Race extends ApplicationAdapter {
 		createBasicSkin();
 		newGameButton = new TextButton("New game", skin); // Use the initialized skin
 		quitGameButton = new TextButton("Quit", skin); // Use the initialized skin
-		orangeCarButton = new TextButton("", skin);
-		blueCarButton = new TextButton("", skin);
-		yellowCarButton = new TextButton("", skin);
-		greenCarButton = new TextButton("", skin);
-		purpleCarButton = new TextButton("", skin);
+		orangeCarButton = new TextButton("ORANGE", skin);
+		blueCarButton = new TextButton("BLUE", skin);
+		yellowCarButton = new TextButton("YELLOW", skin);
+		greenCarButton = new TextButton("GREEN", skin);
+		purpleCarButton = new TextButton("PURPLE", skin);
+		green = new Sprite(greenCar);
+		SpriteDrawable gd = new SpriteDrawable(green);
 		Image b = new Image(background);
 		b.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-		newGameButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2);
-		quitGameButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8-newGameButton.getWidth() - Gdx.graphics.getWidth()/12, Gdx.graphics.getHeight()/2);
-		orangeCarButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8-orangeCarButton.getWidth() - Gdx.graphics.getWidth()/16, Gdx.graphics.getHeight()/2.5f);
-		blueCarButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8+blueCarButton.getWidth() - Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight()/2.5f);
-		yellowCarButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8+yellowCarButton.getWidth() + Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight()/2.5f);
+		int buttonSpacer = Gdx.graphics.getWidth()/20;
+		newGameButton.setPosition(Gdx.graphics.getWidth()/2 + buttonSpacer, Gdx.graphics.getHeight()/2);
+		quitGameButton.setPosition(Gdx.graphics.getWidth()/2 - newGameButton.getWidth() - buttonSpacer, Gdx.graphics.getHeight()/2);
+	//	orangeCarButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/10-orangeCarButton.getWidth() - buttonSpacer, Gdx.graphics.getHeight()/2.5f);
+	//	blueCarButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/10+blueCarButton.getWidth() - (2*buttonSpacer), Gdx.graphics.getHeight()/2.5f);
+	//	yellowCarButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/10+(2*yellowCarButton.getWidth()) - buttonSpacer, Gdx.graphics.getHeight()/2.5f);
+		greenCarButton.setBackground(gd);greenCarButton.setPosition(buttonSpacer, Gdx.graphics.getHeight()/2.5f);
+	//	purpleCarButton.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2.5f);
 		stage.addActor(b);
 		stage.addActor(newGameButton);
 		stage.addActor(quitGameButton);
@@ -98,23 +107,25 @@ public class Tappy_Race extends ApplicationAdapter {
 		stage.addActor(blueCarButton);
 		stage.addActor(yellowCarButton);
 		stage.addActor(greenCarButton);
-		stage.addActor(purpleCarButton);
+	//	stage.addActor(purpleCarButton);
 		addActionListeners();
 	}
 
-
+	/***
+	 * Create skin for Buttons
+	 */
 	private void createBasicSkin() {
 		//Create a font
 		BitmapFont font = new BitmapFont();
 		skin = new Skin();
 		skin.add("default", font);
-
 		//Create a texture
-		Pixmap pixmap = new Pixmap((int) Gdx.graphics.getWidth() / 6, (int) Gdx.graphics.getHeight() / 14, Pixmap.Format.RGB888);
+		Pixmap pixmap = new Pixmap((int) Gdx.graphics.getWidth() / 8, (int) Gdx.graphics.getHeight() / 18, Pixmap.Format.RGB888);
+		//Pixmap imagePixmap = new Pixmap((int) Gdx.graphics.getWidth() / 8, (int) Gdx.graphics.getHeight() / 18, Pixmap.Format.RGB888);
 		pixmap.setColor(Color.WHITE);
-
 		pixmap.fill();
-		skin.add("background", new Texture(pixmap));
+		//skin.add("background", new Texture(pixmap));
+		skin.add("background", background);////////right hereeeeeeeeeeeeeeeeee
 		//Create a button style
 		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
 		textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
@@ -122,12 +133,13 @@ public class Tappy_Race extends ApplicationAdapter {
 		textButtonStyle.checked = skin.newDrawable("background", Color.DARK_GRAY);
 		textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
 		textButtonStyle.font = skin.getFont("default");
-
 		skin.add("default", textButtonStyle);
 	}
 
 
-
+	/**
+	 * Add Action Listeners to menu buttons
+	 */
 	public void addActionListeners(){
 		newGameButton.addListener(new EventListener()
 		{
@@ -143,7 +155,7 @@ public class Tappy_Race extends ApplicationAdapter {
 		blueCarButton.addListener(new EventListener() {
 			@Override
 			public boolean handle(Event event) {
-				System.out.println("YOU TOUCHED NEW BLUE");
+				System.out.println("YOU TOUCHED BLUE");
 				carHolder = blueCar;
 				return true;
 			}
@@ -151,17 +163,28 @@ public class Tappy_Race extends ApplicationAdapter {
 		yellowCarButton.addListener(new EventListener() {
 			@Override
 			public boolean handle(Event event) {
-				System.out.println("YOU TOUCHED NEW YELLOW");
+				System.out.println("YOU TOUCHED YELLOW");
 				carHolder = yellowCar;
 				return true;
 			}
 		});
+		greenCarButton.addListener(new EventListener() {
+			@Override
+			public boolean handle(Event event) {
+				System.out.println("YOU TOUCHED GREEN");
+				carHolder = greenCar;
+				return true;
+			}
+		});
+		purpleCarButton.addListener(new EventListener() {
+			@Override
+			public boolean handle(Event event) {
+				System.out.println("YOU TOUCHED PURPLE");
+				carHolder = purpleCar;
+				return true;
+			}
+		});
 	}
-//	public void addListenerOnSpinnerItemSelection() {
-//		spin = (JSpinner) findViewById(R.id.spinner);
-//		spin.setOnItemSelectedListener(new CustomOnItemSelectedListener());
-//	}
-
 
 	public void start() {
 		carY = 135;
@@ -186,7 +209,6 @@ public class Tappy_Race extends ApplicationAdapter {
 	//	stage.act(Gdx.graphics.getDeltaTime()); //Perform ui logic
 		if (inPreRace) { // three second countdown..tapps are not yet valid
 //			batch.begin();
-
 			batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			batch.draw(orangeCar, (Gdx.graphics.getWidth() / 2 - carWidth/2), carY, carWidth, carHeight);
 			batch.draw(finish, 655, 1280, Gdx.graphics.getWidth() / 11, Gdx.graphics.getWidth() / 12);
@@ -230,7 +252,6 @@ public class Tappy_Race extends ApplicationAdapter {
 			batch.draw(finish, 655, 1280, Gdx.graphics.getWidth() / 11, Gdx.graphics.getWidth() / 12);
 			batch.draw(carHolder, (Gdx.graphics.getWidth() / 2 - carWidth/2), carY, carWidth, carHeight);
 			//batch.end();
-
 		}
 		else if (!inPreRace && !gameStarted){// game started = false? menu elements
 			//batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
