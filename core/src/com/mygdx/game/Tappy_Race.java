@@ -21,9 +21,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 
 public class Tappy_Race extends ApplicationAdapter {
-	SpriteBatch batch, timeDisplay;String timer;
-	private BitmapFont font;
-	Texture background, finish, orangeCar, blueCar, purpleCar, yellowCar, greenCar, hearseCar, carHolder, blackBox, start;
+	Batch batch;
+	BitmapFont font;
+	Texture background, finish, orangeCar, blueCar, purpleCar, yellowCar, greenCar, hearseCar, carHolder, blackBox, start, play, quit;
 	Texture[] lights = new Texture[3];
 	Texture redLight, yellowLight, greenLight;
 	long countDownTime,raceStartTime;
@@ -31,6 +31,7 @@ public class Tappy_Race extends ApplicationAdapter {
 	int numClicks;
 	boolean gameStarted;
 	int i = 0;
+	int tapLocation;
 	int gameState;
 	boolean inPreRace, raceComplete;
 	float carY, deltaY, drag, velocity;
@@ -38,21 +39,21 @@ public class Tappy_Race extends ApplicationAdapter {
 	float width, height, carWidth, carHeight;
 	Actor noCarSelected;
 	private Stage stage;
-	Skin buttonSkin, yellowSkin, orangeSkin, blueSkin, greenSkin, purpleSkin, timeSkin;
+	Skin buttonSkin, yellowSkin, orangeSkin, blueSkin, greenSkin, purpleSkin;
 	Actor backGroundSkin;
 	Batch backBatch;
-	TextButton newGameButton;
-	TextButton raceTimeButton, orangeCarButton, blueCarButton, yellowCarButton, greenCarButton, purpleCarButton, blackBoxButton, startButton;
+	TextButton orangeCarButton, blueCarButton, yellowCarButton, greenCarButton, purpleCarButton, newGameButton, playButton, quitButton;
 
 
-
+	/**
+	 * Instantiate variables
+	 */
 	@Override
 	public void create() {
 		inPreRace = false;
  		gameStarted = false;
 		raceComplete = false;
 		batch = new SpriteBatch();
-		timeDisplay = new SpriteBatch();
 		font = new BitmapFont();font.setColor(Color.BLACK); font.getData().setScale(5);
 		totalTime = 3.5f;
 		carWidth = 0;
@@ -72,6 +73,8 @@ public class Tappy_Race extends ApplicationAdapter {
 		greenLight = new Texture("green_light.jpg");
 		blackBox = new Texture("blackBox.png");
 		start = new Texture("start.png");
+		play = new Texture("play.png");
+		quit = new Texture("quit.png");
 		backBatch = new SpriteBatch();
 		backGroundSkin = new Actor();backGroundSkin.draw(backBatch, 1f);
 		//timerView = new TextView();
@@ -82,6 +85,7 @@ public class Tappy_Race extends ApplicationAdapter {
 		raceStartTime = 0;
 		numClicks = 1;
 		deltaY = 0;
+		tapLocation = 0;
 		finishLine = Gdx.graphics.getHeight()/2;
 		stage = new Stage(new ScreenViewport());
 		// Add UI elements to screen
@@ -91,6 +95,9 @@ public class Tappy_Race extends ApplicationAdapter {
 		createBasicSkin();
 		newGameButton = new TextButton("", buttonSkin); // Use the initialized skin
 //		blackBoxButton = new TextButton("default", timeSkin);blackBoxButton.setWidth(400);blackBoxButton.setHeight(400); // Use the initialized skin
+		playButton = new TextButton("", buttonSkin);playButton.setWidth(200);playButton.setHeight(200); // Use the initialized skin
+		quitButton = new TextButton("", buttonSkin);quitButton.setWidth(200);quitButton.setHeight(200); // Use the initialized skin
+//
 		orangeCarButton = new TextButton("", orangeSkin);orangeCarButton.setWidth(200);orangeCarButton.setHeight(200);
 		blueCarButton = new TextButton("", blueSkin);blueCarButton.setWidth(200);blueCarButton.setHeight(200);
 		yellowCarButton = new TextButton("", yellowSkin);yellowCarButton.setWidth(200);yellowCarButton.setHeight(200);
@@ -102,7 +109,6 @@ public class Tappy_Race extends ApplicationAdapter {
 
 		int buttonSpacer = Gdx.graphics.getWidth()/20;
 		newGameButton.setPosition(Gdx.graphics.getWidth()/2 - newGameButton.getWidth()/2, Gdx.graphics.getHeight()/2);
-	//	blackBoxButton.setPosition(Gdx.graphics.getWidth()/2 - raceTimeButton.getWidth()/2, Gdx.graphics.getHeight()/1.5f);
 		orangeCarButton.setPosition(buttonSpacer, Gdx.graphics.getHeight()/2.5f);
 		blueCarButton.setPosition(orangeCarButton.getX() + orangeCarButton.getWidth() + buttonSpacer, Gdx.graphics.getHeight()/2.5f);
 		yellowCarButton.setPosition(blueCarButton.getX() + blueCarButton.getWidth() + buttonSpacer, Gdx.graphics.getHeight()/2.5f);
@@ -110,7 +116,6 @@ public class Tappy_Race extends ApplicationAdapter {
 		purpleCarButton.setPosition(greenCarButton.getX() + greenCarButton.getWidth() + buttonSpacer, Gdx.graphics.getHeight()/2.5f);
 		stage.addActor(b);
 		stage.addActor(newGameButton);
-	//	stage.addActor(raceTimeButton);
 		stage.addActor(orangeCarButton);
 		stage.addActor(blueCarButton);
 		stage.addActor(yellowCarButton);
@@ -119,9 +124,12 @@ public class Tappy_Race extends ApplicationAdapter {
 		addActionListeners();
 	}
 
-
+	/**
+	 * Start a new race
+	 */
 	public void start() {
 		//	carHolder = orangeCar;
+		tapLocation = 0;
 		carY = 135;
 		gameState = 1;
 		i = 0;
@@ -135,11 +143,16 @@ public class Tappy_Race extends ApplicationAdapter {
 		numClicks = 1;
 		inPreRace = true; // move this to actions lister method?
 		gameStarted = false; // delete this, add to end of aciton listebner?
+		font.getData().setScale(5);
 	}
 
+	/**
+	 * Draw Textures, determine at what stage the car is at
+	 */
 	@Override
 	public void render() {
 		batch.begin();
+
 		//	stage.act(Gdx.graphics.getDeltaTime()); //Perform ui logic
 		if (inPreRace) { // three second countdown..tapps are not yet valid
 //			batch.begin();
@@ -174,6 +187,7 @@ public class Tappy_Race extends ApplicationAdapter {
 					batch.draw(carHolder, (Gdx.graphics.getWidth() / 2 - carWidth/2), carY, carWidth, carHeight);
 					batch.draw(finish, 655, 1280, Gdx.graphics.getWidth() / 11, Gdx.graphics.getWidth() / 12); // change to draw() helper!!!!!!!!!!!!!
 				} else {
+					//Gdx.input.vibrate(250);
 					gameState = 2;
 				}
 			} else if (gameState == 0) { // user tapped once
@@ -186,10 +200,6 @@ public class Tappy_Race extends ApplicationAdapter {
 				}
 			} else if (gameState == 2) { // game over
 				raceTime = (TimeUtils.timeSinceNanos(raceStartTime))/1000000000.0f; // seconds ... how to get some decimal places? just concatinate a decimal?
-				System.out.format("%.2f", raceTime).println("This was the time it took to raceEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + raceTime);
-				////////// PRINT THE FUCKING TIMERRRRRRR
-				//font.draw(batch, "NIGGA THIS BETTER WORKKKKKKKK" + raceTime, 100, 100);
-
 				raceComplete(); // changes game state to complete
 
 			}
@@ -201,14 +211,6 @@ public class Tappy_Race extends ApplicationAdapter {
 		else if (gameState == 3){// game started = false? menu elements
 			Gdx.gl.glClearColor(1, 1, 1, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-		//	timeDisplay = new SpriteBatch();
-		//	timer = ("Your time was");
-		//	timeDisplay.begin();
-		//	batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // print background and car at new position
-		//	font.draw(timeDisplay, timer, 250, 1000, 1, 15, 50, 100, false);
-		//	timeDisplay.end();
-		//	batch.begin();
 		}
 		else if (!inPreRace && !gameStarted && gameState != 3){// game started = false? menu elements
 			Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -218,18 +220,22 @@ public class Tappy_Race extends ApplicationAdapter {
 		batch.end();
 	}
 
+	/**
+	 * Show race time, set action post race action listeners
+	 */
 	public void raceComplete(){
-		System.out.println("This was the time it took to race... HAS IT ENDEDDDDDDDDDD " + raceTime);
 		inPreRace = false;
-		//(Float.toString("balls"raceTime));
-		gameState = 3;
 		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // print background and car at new position
-		//.draw(finish, 655, 1280, Gdx.graphics.getWidth() / 11, Gdx.graphics.getWidth() / 12); // change to draw)_ helper!!!!!!!!!!!!!!
-		// add replay
-		// add quit
-
-		font.draw(batch, "NIGGA THIS BETTER WORK" + raceTime, 50, 1000);
-
+		font.getData().setScale(5);
+		font.draw(batch, String.format("Your Time was " + raceTime, "%.2"), 50, 1000);
+		playButton.setPosition((Gdx.graphics.getWidth() / 2) + Gdx.graphics.getWidth()/15, 1000);
+		quitButton.setPosition((Gdx.graphics.getWidth() / 2) - Gdx.graphics.getWidth()/15, 1000);
+		stage.addActor(playButton);
+		stage.addActor(quitButton);
+		batch.draw(play, (Gdx.graphics.getWidth() / 2) + Gdx.graphics.getWidth()/15, 1000, Gdx.graphics.getWidth() / 5, Gdx.graphics.getWidth() / 5);
+		batch.draw(quit, (Gdx.graphics.getWidth() / 2) - Gdx.graphics.getWidth()/15, 1000, Gdx.graphics.getWidth() / 5, Gdx.graphics.getWidth() / 5);
+		gameState = 3;
+		addEndOfGameActionListeners();
 	}
 
 	/***
@@ -260,7 +266,8 @@ public class Tappy_Race extends ApplicationAdapter {
 		yellowSkin.add("yellowCar", yellowCar);
 		greenSkin.add("greenCar", greenCar);
 		purpleSkin.add("purpleCar", purpleCar);
-		//Create a button style
+
+		//Create the different car buttons
 		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
 		textButtonStyle.up = buttonSkin.newDrawable("start", Color.GRAY);
 		textButtonStyle.down = buttonSkin.newDrawable("start", Color.DARK_GRAY);
@@ -313,7 +320,7 @@ public class Tappy_Race extends ApplicationAdapter {
 
 
 	/**
-	 * Add Action Listeners to menu buttons
+	 * Add Action to pre race buttons
 	 */
 	public void addActionListeners(){
 		newGameButton.addListener(new EventListener()
@@ -372,14 +379,45 @@ public class Tappy_Race extends ApplicationAdapter {
 		});
 	}
 
+	/**
+	 * Add action listeners for end of post race buttons
+	 */
+	public void addEndOfGameActionListeners(){
+		playButton.addListener(new EventListener()
+		{
+			@Override
+			public boolean handle(Event event)
+			{
+				System.out.println("YOU TOUCHED START");
+				start();
+				return true;
+			}
+		});
+		quitButton.addListener(new EventListener()
+			{
+			@Override
+			public boolean handle(Event event)
+			{
+				System.out.println("YOU TOUCHED EXIT");
+				Gdx.app.exit();
+				return true;
+			}
+		});
+		}
 
+	/**
+	 * Set the car movement
+	 */
 	public void setCarMovement(){
 		deltaY = (carY - 135)*.0075f;
-		carWidth = width / (4.5f + ((deltaY*deltaY*deltaY)*.055f));
-		carHeight = height / (4.5f + ((deltaY*deltaY*deltaY)*.055f));
+		carWidth = width / (4.5f + ((deltaY*deltaY*deltaY)*.075f));
+		carHeight = height / (4.5f + ((deltaY*deltaY*deltaY)*.075f));
 	}
 
-		@Override
+	/**
+	 * Dispose the batch
+	 */
+	@Override
 		public void dispose () {
 			batch.dispose();
 		}
