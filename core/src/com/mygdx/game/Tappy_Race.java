@@ -51,7 +51,7 @@ public class Tappy_Race extends ApplicationAdapter {
 	@Override
 	public void create() {
 		inPreRace = false;
- 		gameStarted = false;
+		gameStarted = false;
 		raceComplete = false;
 		batch = new SpriteBatch();
 		font = new BitmapFont();font.setColor(Color.BLACK); font.getData().setScale(5);
@@ -200,13 +200,7 @@ public class Tappy_Race extends ApplicationAdapter {
 				}
 			} else if (gameState == 2) { // game over
 				raceTime = (TimeUtils.timeSinceNanos(raceStartTime))/1000000000.0f; // seconds ... how to get some decimal places? just concatinate a decimal?
-				System.out.format("%.2f", raceTime).println("This was the time it took to raceEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + raceTime);
-				////////// PRINT THE FUCKING TIMERRRRRRR
-				font.draw(batch, "NIGGA THIS BETTER WORKKKKKKKK" + raceTime, 100, 100);
-
-				raceComplete();
-				//stage.addActor(raceTimeButton);
-
+				raceComplete(); // changes game state to complete
 
 			}
 //			batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // print background and car at new position
@@ -216,15 +210,7 @@ public class Tappy_Race extends ApplicationAdapter {
 		}
 		else if (gameState == 3){// game started = false? menu elements
 			Gdx.gl.glClearColor(1, 1, 1, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-			font.draw(timeDisplay, timer, 650, 1000, 1, 15, 50, 100, false);
-
-			timeDisplay = new SpriteBatch();
-			timer = ("Your time was");
-			timeDisplay.begin();
-			font.draw(timeDisplay, timer, 650, 1000, 1, 15, 50, 100, false);
-			timeDisplay.end();
-		//	batch.begin();
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		}
 		else if (!inPreRace && !gameStarted && gameState != 3){// game started = false? menu elements
 			Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -250,12 +236,7 @@ public class Tappy_Race extends ApplicationAdapter {
 		batch.draw(quit, (Gdx.graphics.getWidth() / 2) - Gdx.graphics.getWidth()/15, 1000, Gdx.graphics.getWidth() / 5, Gdx.graphics.getWidth() / 5);
 		gameState = 3;
 		addEndOfGameActionListeners();
-		//(Float.toString("balls"raceTime));
-		gameState = 3;
-		font.draw(batch, "NIGGA THIS BETTER WORK" + raceTime, 500, 500);
-		gameStarted = false;
-
-jj	}
+	}
 
 	/***
 	 * Create skin for Buttons
@@ -413,7 +394,7 @@ jj	}
 			}
 		});
 		quitButton.addListener(new EventListener()
-			{
+		{
 			@Override
 			public boolean handle(Event event)
 			{
@@ -422,7 +403,7 @@ jj	}
 				return true;
 			}
 		});
-		}
+	}
 
 	/**
 	 * Set the car movement
@@ -437,9 +418,9 @@ jj	}
 	 * Dispose the batch
 	 */
 	@Override
-		public void dispose () {
-			batch.dispose();
-		}
+	public void dispose () {
+		batch.dispose();
 	}
+}
 
 
