@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -323,7 +324,7 @@ public class Tappy_Race extends ApplicationAdapter {
 	 * Add Action to pre race buttons
 	 */
 	public void addActionListeners(){
-		newGameButton.addListener(new EventListener()
+		newGameButton.addListener(new ClickListener()
 		{
 			@Override
 			public boolean handle(Event event)
@@ -337,7 +338,7 @@ public class Tappy_Race extends ApplicationAdapter {
 				return true;
 			}
 		});
-		orangeCarButton.addListener(new EventListener() {
+		orangeCarButton.addListener(new ClickListener() {
 			@Override
 			public boolean handle(Event event) {
 				System.out.println("YOU TOUCHED BLUE");
@@ -345,7 +346,7 @@ public class Tappy_Race extends ApplicationAdapter {
 				return true;
 			}
 		});
-		blueCarButton.addListener(new EventListener() {
+		blueCarButton.addListener(new ClickListener() {
 			@Override
 			public boolean handle(Event event) {
 				System.out.println("YOU TOUCHED BLUE");
@@ -353,7 +354,7 @@ public class Tappy_Race extends ApplicationAdapter {
 				return true;
 			}
 		});
-		yellowCarButton.addListener(new EventListener() {
+		yellowCarButton.addListener(new ClickListener() {
 			@Override
 			public boolean handle(Event event) {
 				System.out.println("YOU TOUCHED YELLOW");
@@ -361,7 +362,7 @@ public class Tappy_Race extends ApplicationAdapter {
 				return true;
 			}
 		});
-		greenCarButton.addListener(new EventListener() {
+		greenCarButton.addListener(new ClickListener() {
 			@Override
 			public boolean handle(Event event) {
 				System.out.println("YOU TOUCHED GREEN");
@@ -369,7 +370,7 @@ public class Tappy_Race extends ApplicationAdapter {
 				return true;
 			}
 		});
-		purpleCarButton.addListener(new EventListener() {
+		purpleCarButton.addListener(new ClickListener() {
 			@Override
 			public boolean handle(Event event) {
 				System.out.println("YOU TOUCHED PURPLE");
