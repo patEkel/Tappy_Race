@@ -192,8 +192,8 @@ public class Tappy_Race extends ApplicationAdapter {
 				}
 			} else if (gameState == 0) { // user tapped once
 				if (Gdx.input.justTouched()) {
-					gameState = 1;
 					velocity=.25f;
+					gameState = 1;
 					batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // print background and car at new position
 					batch.draw(carHolder, (Gdx.graphics.getWidth() / 2 - carWidth/2), carY, carWidth, carHeight);
 					batch.draw(finish, 655, 1280, Gdx.graphics.getWidth() / 11, Gdx.graphics.getWidth() / 12); // change to draw)_ helper!!!!!!!!!!!!!!
@@ -227,13 +227,13 @@ public class Tappy_Race extends ApplicationAdapter {
 		inPreRace = false;
 		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // print background and car at new position
 		font.getData().setScale(5);
-		font.draw(batch, String.format("Your Time was " + raceTime, "%.2"), 50, 1000);
-		playButton.setPosition((Gdx.graphics.getWidth() / 2) + Gdx.graphics.getWidth()/15, 1000);
-		quitButton.setPosition((Gdx.graphics.getWidth() / 2) - Gdx.graphics.getWidth()/15, 1000);
+		font.draw(batch, String.format("Your Time was " + raceTime, "%.2"), 50, Gdx.graphics.getWidth() / 2);
+		playButton.setPosition((Gdx.graphics.getWidth() / 2) + Gdx.graphics.getWidth()/15, Gdx.graphics.getHeight()/2.5f);
+		quitButton.setPosition((Gdx.graphics.getWidth() / 2) - Gdx.graphics.getWidth()/3.5f, Gdx.graphics.getHeight()/2.5f);
 		stage.addActor(playButton);
 		stage.addActor(quitButton);
-		batch.draw(play, (Gdx.graphics.getWidth() / 2) + Gdx.graphics.getWidth()/15, 1000, Gdx.graphics.getWidth() / 5, Gdx.graphics.getWidth() / 5);
-		batch.draw(quit, (Gdx.graphics.getWidth() / 2) - Gdx.graphics.getWidth()/15, 1000, Gdx.graphics.getWidth() / 5, Gdx.graphics.getWidth() / 5);
+		batch.draw(play, (Gdx.graphics.getWidth() / 2) + Gdx.graphics.getWidth()/15, Gdx.graphics.getHeight()/2.5f, Gdx.graphics.getWidth() / 5, Gdx.graphics.getWidth() / 5);
+		batch.draw(quit, (Gdx.graphics.getWidth() / 2) - Gdx.graphics.getWidth()/3.5f, Gdx.graphics.getHeight()/2.5f, Gdx.graphics.getWidth() / 5, Gdx.graphics.getWidth() / 5);
 		gameState = 3;
 		addEndOfGameActionListeners();
 	}
