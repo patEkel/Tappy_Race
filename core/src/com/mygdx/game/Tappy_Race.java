@@ -1,3 +1,6 @@
+// Simple Android game Written by Patrick Ekel
+// Images taken from openclipart.org
+
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -20,31 +23,33 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-
+/**
+ * Class that uses libGDX for graphics rendering
+ * Draws a car that accelerates down the track based on number of user clicks
+ */
 public class Tappy_Race extends ApplicationAdapter {
-	Batch batch;
-	BitmapFont font;
-	Texture background, finish, orangeCar, blueCar, purpleCar, yellowCar, greenCar, hearseCar, carHolder, blackBox, start, play, quit;
-	Texture[] lights = new Texture[3];
-	Texture redLight, yellowLight, greenLight;
-	long countDownTime,raceStartTime;
-	float totalTime, raceTime;
-	int numClicks;
-	boolean gameStarted;
-	int i = 0;
-	int tapLocation;
-	int gameState;
-	boolean inPreRace, raceComplete;
-	float carY, deltaY, drag, velocity;
-	float finishLine, finishDistance;
-	float width, height, carWidth, carHeight;
-	Actor noCarSelected;
+	private Batch batch;
+	private BitmapFont font;
+	private Texture background, finish, orangeCar, blueCar, purpleCar, yellowCar, greenCar, hearseCar, carHolder, blackBox, start, play, quit;
+	private Texture[] lights = new Texture[3];
+	private Texture redLight, yellowLight, greenLight;
+	private long countDownTime,raceStartTime;
+	private float totalTime, raceTime;
+	private int numClicks;
+	private boolean gameStarted;
+	private int i = 0;
+	private int tapLocation;
+	private int gameState;
+	private boolean inPreRace, raceComplete;
+	private float carY, deltaY, drag, velocity;
+	private float finishLine, finishDistance;
+	private float width, height, carWidth, carHeight;
+	private Actor noCarSelected;
 	private Stage stage;
-	Skin buttonSkin, yellowSkin, orangeSkin, blueSkin, greenSkin, purpleSkin;
-	Actor backGroundSkin;
-	Batch backBatch;
-	TextButton orangeCarButton, blueCarButton, yellowCarButton, greenCarButton, purpleCarButton, newGameButton, playButton, quitButton;
-
+	private Skin buttonSkin, yellowSkin, orangeSkin, blueSkin, greenSkin, purpleSkin;
+	private Actor backGroundSkin;
+	private Batch backBatch;
+	private TextButton orangeCarButton, blueCarButton, yellowCarButton, greenCarButton, purpleCarButton, newGameButton, playButton, quitButton;
 
 	/**
 	 * Instantiate variables
@@ -78,7 +83,6 @@ public class Tappy_Race extends ApplicationAdapter {
 		quit = new Texture("quit.png");
 		backBatch = new SpriteBatch();
 		backGroundSkin = new Actor();backGroundSkin.draw(backBatch, 1f);
-		//timerView = new TextView();
 		lights[0] = redLight;
 		lights[1] = yellowLight;
 		lights[2] = greenLight;
@@ -148,20 +152,15 @@ public class Tappy_Race extends ApplicationAdapter {
 	}
 
 	/**
-	 * Draw Textures, determine at what stage the car is at
+	 * Draw Textures, determine current stage of race
 	 */
 	@Override
 	public void render() {
 		batch.begin();
-
-		//	stage.act(Gdx.graphics.getDeltaTime()); //Perform ui logic
 		if (inPreRace) { // three second countdown..tapps are not yet valid
-//			batch.begin();
-			batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			batch.draw(carHolder, (Gdx.graphics.getWidth() / 2 - carWidth/2), carY, carWidth, carHeight);
-			batch.draw(finish, 655, 1280, Gdx.graphics.getWidth() / 11, Gdx.graphics.getWidth() / 12);
+			draw();
 			if (TimeUtils.timeSinceNanos(countDownTime) > 1000000000 && i < 3) {
-				batch.draw(lights[i], 522, 1440, Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
+				batch.draw(lights[i], (Gdx.graphics.getWidth()/2 - (3*greenLight.getWidth())), Gdx.graphics.getHeight()/1.5f, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4);
 				countDownTime = TimeUtils.nanoTime();
 				i++;
 			} else if (i >= 3 && TimeUtils.timeSinceNanos(countDownTime) > 1000000000) {
@@ -171,7 +170,7 @@ public class Tappy_Race extends ApplicationAdapter {
 				gameState = 0;
 				velocity = 1;
 			} else if (i < 3 && TimeUtils.timeSinceNanos(countDownTime) < 1000000000) {
-				batch.draw(lights[i], 522, 1440, Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
+				batch.draw(lights[i], (Gdx.graphics.getWidth() / 2 - (3*greenLight.getWidth())), Gdx.graphics.getHeight()/1.5f, Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
 			}
 		} else if (gameStarted) {
 			if (gameState == 1) { // screen has been tapped, car is in motion
@@ -184,30 +183,21 @@ public class Tappy_Race extends ApplicationAdapter {
 					velocity += drag;
 					carY += velocity;
 					setCarMovement();
-					batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // print background and car at new position
-					batch.draw(carHolder, (Gdx.graphics.getWidth() / 2 - carWidth/2), carY, carWidth, carHeight);
-					batch.draw(finish, 655, 1280, Gdx.graphics.getWidth() / 11, Gdx.graphics.getWidth() / 12); // change to draw() helper!!!!!!!!!!!!!
-				} else {
-					//Gdx.input.vibrate(250);
+					draw();
+				} else { // finish line has been reached
 					gameState = 2;
 				}
 			} else if (gameState == 0) { // user tapped once
 				if (Gdx.input.justTouched()) {
 					velocity=.25f;
 					gameState = 1;
-					batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // print background and car at new position
-					batch.draw(carHolder, (Gdx.graphics.getWidth() / 2 - carWidth/2), carY, carWidth, carHeight);
-					batch.draw(finish, 655, 1280, Gdx.graphics.getWidth() / 11, Gdx.graphics.getWidth() / 12); // change to draw)_ helper!!!!!!!!!!!!!!
+					draw();
 				}
 			} else if (gameState == 2) { // game over
 				raceTime = (TimeUtils.timeSinceNanos(raceStartTime))/1000000000.0f; // seconds ... how to get some decimal places? just concatinate a decimal?
 				raceComplete(); // changes game state to complete
 
 			}
-//			batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // print background and car at new position
-//			batch.draw(carHolder, (Gdx.graphics.getWidth() / 2 - carWidth/2), carY, carWidth, carHeight);
-//			batch.draw(finish, 655, 1280, Gdx.graphics.getWidth() / 11, Gdx.graphics.getWidth() / 12);
-
 		}
 		else if (gameState == 3){// game started = false? menu elements
 			Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -219,6 +209,15 @@ public class Tappy_Race extends ApplicationAdapter {
 			stage.draw();
 		}
 		batch.end();
+	}
+
+	/**
+	 * Helper method to draw race background, finish line, and car
+	 */
+	public void draw(){
+		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(carHolder, (Gdx.graphics.getWidth()/2 - carWidth/2), carY, carWidth, carHeight);
+		batch.draw(finish, Gdx.graphics.getWidth()/2 - (1.5f*finish.getWidth()), Gdx.graphics.getHeight()/1.9f, Gdx.graphics.getWidth() / 11, Gdx.graphics.getWidth() / 12);
 	}
 
 	/**
@@ -318,7 +317,6 @@ public class Tappy_Race extends ApplicationAdapter {
 		purpleSkin.add("default", purpleTextButtonStyle);
 		greenSkin.add("default", greenTextButtonStyle);
 	}
-
 
 	/**
 	 * Add Action to pre race buttons
