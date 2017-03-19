@@ -179,7 +179,7 @@ public class Tappy_Race extends ApplicationAdapter {
 				if (Gdx.input.justTouched()) {
 					numClicks++;
 					carY += velocity;
-					velocity+=.125;
+					velocity+=.12;
 				}
 				if (carY < finishLine + finishDistance-25) {
 					velocity += drag;
@@ -191,7 +191,7 @@ public class Tappy_Race extends ApplicationAdapter {
 				}
 			} else if (gameState == 0) { // user tapped once
 				if (Gdx.input.justTouched()) {
-					velocity=.125f;
+					velocity=.12f;
 					gameState = 1;
 					draw();
 				}
@@ -204,7 +204,7 @@ public class Tappy_Race extends ApplicationAdapter {
 			Gdx.gl.glClearColor(1, 1, 1, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		}
-		else if (!inPreRace && !gameStarted && gameState != 3){// game started = false? menu elements
+		else{// game started = false? menu elements
 			Gdx.gl.glClearColor(1, 1, 1, 1);
 			stage.addActor(backGroundSkin);
 			stage.draw();
