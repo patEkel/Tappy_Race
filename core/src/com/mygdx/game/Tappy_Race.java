@@ -6,7 +6,6 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -159,19 +158,16 @@ public class Tappy_Race extends ApplicationAdapter {
 		if (inPreRace) { // three second countdown..tapps are not yet valid
 			draw();
 			if (TimeUtils.timeSinceNanos(countDownTime) > 1000000000 && i < 3) {
-				batch.draw(lights[i], (Gdx.graphics.getWidth()/2 - (3*greenLight.getWidth())), Gdx.graphics.getHeight()/1.5f, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4);
+				batch.draw(lights[i], (Gdx.graphics.getWidth()/2 - (Gdx.graphics.getWidth()/8)), Gdx.graphics.getHeight()/1.5f, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4);
 				countDownTime = TimeUtils.nanoTime();
 				i++;
-			} else if (i >= 3 && TimeUtils.timeSinceNanos(countDownTime) > 1000000000) {
-				gameStarted = true;
+			} else if (i >= 2 && TimeUtils.timeSinceNanos(countDownTime) > 1000000000) {
 				raceStartTime = TimeUtils.nanoTime();
-				inPreRace = false;
 				gameState = 0;
-				velocity = 1;
-//				playButton.remove();
-//				quitButton.remove();
-			} else if (i < 3 && TimeUtils.timeSinceNanos(countDownTime) < 1000000000) {
-				batch.draw(lights[i], (Gdx.graphics.getWidth() / 2 - (3*greenLight.getWidth())), Gdx.graphics.getHeight()/1.5f, Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
+                inPreRace = false;
+                gameStarted = true;
+            } else if (i < 3 && TimeUtils.timeSinceNanos(countDownTime) < 1000000000) {
+                batch.draw(lights[i], (Gdx.graphics.getWidth()/2 - (Gdx.graphics.getWidth()/8)), Gdx.graphics.getHeight()/1.5f, Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
 			}
 		} else if (gameStarted) {
 			if (gameState == 1) { // screen has been tapped, car is in motion
@@ -191,7 +187,9 @@ public class Tappy_Race extends ApplicationAdapter {
 				if (Gdx.input.justTouched()) {
 					velocity = .12f;
 					gameState = 1;
-					draw();
+                    carY += velocity;
+                    setCarMovement();
+                    draw();
 				}
 			} else if (gameState == 2) { // game over
 				raceTime = (TimeUtils.timeSinceNanos(raceStartTime))/1000000000.0f; // seconds ... how to get some decimal places? just concatinate a decimal?
@@ -218,7 +216,7 @@ public class Tappy_Race extends ApplicationAdapter {
 	public void draw(){
 		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.draw(carHolder, (Gdx.graphics.getWidth()/2 - carWidth/2), carY, carWidth, carHeight);
-		batch.draw(finish, Gdx.graphics.getWidth()/2 - (1.5f*finish.getWidth()), Gdx.graphics.getHeight()/1.9f, Gdx.graphics.getWidth() / 11, Gdx.graphics.getWidth() / 12);
+		batch.draw(finish, Gdx.graphics.getWidth()/2 - (finish.getWidth()), Gdx.graphics.getHeight()/1.825f, Gdx.graphics.getWidth() / 13, Gdx.graphics.getWidth() / 13);
 	}
 
 	/**
