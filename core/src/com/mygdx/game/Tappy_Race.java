@@ -63,7 +63,7 @@ public class Tappy_Race extends ApplicationAdapter {
 		font = new BitmapFont();font.setColor(Color.BLACK); font.getData().setScale(5);
 		totalTime = 3.5f;
 		carWidth = 0;
-		velocity = 0;
+	//	velocity = 0;
 		gameState = 0;
 		drag = 0;
 		background = new Texture("road_into.jpg");
@@ -77,7 +77,6 @@ public class Tappy_Race extends ApplicationAdapter {
 		redLight = new Texture("red_light.jpg");
 		yellowLight = new Texture("yellow_light.jpg");
 		greenLight = new Texture("green_light.jpg");
-		blackBox = new Texture("blackBox.png");
 		start = new Texture("start.png");
 		play = new Texture("play.png");
 		quit = new Texture("quit.png");
@@ -134,7 +133,8 @@ public class Tappy_Race extends ApplicationAdapter {
 	 */
 	public void start() {
 		//	carHolder = orangeCar;
-		newGameButton.remove();
+//		newGameButton.remove();
+		velocity = 0;
 		tapLocation = 0;
 		carY = 135;
 		gameState = 1;
@@ -160,6 +160,7 @@ public class Tappy_Race extends ApplicationAdapter {
 		batch.begin();
 		if (inPreRace) { // three second countdown..tapps are not yet valid
 			draw();
+			newGameButton.remove();
 			if (TimeUtils.timeSinceNanos(countDownTime) > 1000000000 && i < 3) {
 				batch.draw(lights[i], (Gdx.graphics.getWidth()/2 - (3*greenLight.getWidth())), Gdx.graphics.getHeight()/1.5f, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4);
 				countDownTime = TimeUtils.nanoTime();
@@ -178,7 +179,7 @@ public class Tappy_Race extends ApplicationAdapter {
 				if (Gdx.input.justTouched()) {
 					numClicks++;
 					carY += velocity;
-					velocity+=.25;
+					velocity+=.125;
 				}
 				if (carY < finishLine + finishDistance-25) {
 					velocity += drag;
@@ -190,14 +191,13 @@ public class Tappy_Race extends ApplicationAdapter {
 				}
 			} else if (gameState == 0) { // user tapped once
 				if (Gdx.input.justTouched()) {
-					velocity=.25f;
+					velocity=.125f;
 					gameState = 1;
 					draw();
 				}
 			} else if (gameState == 2) { // game over
 				raceTime = (TimeUtils.timeSinceNanos(raceStartTime))/1000000000.0f; // seconds ... how to get some decimal places? just concatinate a decimal?
 				raceComplete(); // changes game state to complete
-
 			}
 		}
 		else if (gameState == 3){// game started = false? menu elements
@@ -230,11 +230,11 @@ public class Tappy_Race extends ApplicationAdapter {
 		font.getData().setScale(5);
 		font.draw(batch, String.format("Your Time was " + raceTime, "%.2"), 50, Gdx.graphics.getWidth() / 2);
 		playButton.setPosition((Gdx.graphics.getWidth() / 2) + Gdx.graphics.getWidth()/15, Gdx.graphics.getHeight()/2.5f);
-		quitButton.setPosition((Gdx.graphics.getWidth() / 2) - Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight()/2.5f);
+		quitButton.setPosition((Gdx.graphics.getWidth() / 2) - Gdx.graphics.getWidth()/3.5f, Gdx.graphics.getHeight()/2.5f);
 		stage.addActor(playButton);
 		stage.addActor(quitButton);
 		batch.draw(play, (Gdx.graphics.getWidth() / 2) + Gdx.graphics.getWidth()/15, Gdx.graphics.getHeight()/2.5f, Gdx.graphics.getWidth() / 5, Gdx.graphics.getWidth() / 5);
-		batch.draw(quit, (Gdx.graphics.getWidth() / 2) - Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight()/2.5f, Gdx.graphics.getWidth() / 5, Gdx.graphics.getWidth() / 5);
+		batch.draw(quit, (Gdx.graphics.getWidth() / 2) - Gdx.graphics.getWidth()/3.5f, Gdx.graphics.getHeight()/2.5f, Gdx.graphics.getWidth() / 5, Gdx.graphics.getWidth() / 5);
 		gameState = 3;
 		addEndOfGameActionListeners();
 	}
