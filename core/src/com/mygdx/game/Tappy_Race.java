@@ -133,7 +133,13 @@ public class Tappy_Race extends ApplicationAdapter {
 	 */
 	public void start() {
 		//	carHolder = orangeCar;
-//		newGameButton.remove();
+		newGameButton.remove();
+		orangeCarButton.remove();
+		yellowCarButton.remove();
+		greenCarButton.remove();
+		purpleCarButton.remove();
+		blueCarButton.remove();
+
 		velocity = 0;
 		tapLocation = 0;
 		carY = 135;
@@ -160,7 +166,7 @@ public class Tappy_Race extends ApplicationAdapter {
 		batch.begin();
 		if (inPreRace) { // three second countdown..tapps are not yet valid
 			draw();
-			newGameButton.remove();
+	//		newGameButton.remove();
 			if (TimeUtils.timeSinceNanos(countDownTime) > 1000000000 && i < 3) {
 				batch.draw(lights[i], (Gdx.graphics.getWidth()/2 - (3*greenLight.getWidth())), Gdx.graphics.getHeight()/1.5f, Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4);
 				countDownTime = TimeUtils.nanoTime();
