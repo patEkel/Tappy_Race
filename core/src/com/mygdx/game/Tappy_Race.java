@@ -164,9 +164,10 @@ public class Tappy_Race extends ApplicationAdapter {
 			} else if (i >= 2 && TimeUtils.timeSinceNanos(countDownTime) > 1000000000) {
 				raceStartTime = TimeUtils.nanoTime();
 				gameState = 0;
-                inPreRace = false;
                 gameStarted = true;
-            } else if (i < 3 && TimeUtils.timeSinceNanos(countDownTime) < 1000000000) {
+				inPreRace = false;
+
+			} else if (i < 3 && TimeUtils.timeSinceNanos(countDownTime) < 1000000000) {
                 batch.draw(lights[i], (Gdx.graphics.getWidth()/2 - (Gdx.graphics.getWidth()/8)), Gdx.graphics.getHeight()/1.5f, Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
 			}
 		} else if (gameStarted) {
@@ -400,7 +401,8 @@ public class Tappy_Race extends ApplicationAdapter {
 			public boolean handle(Event event)
 			{
 				System.out.println("YOU TOUCHED EXIT");
-				Gdx.app.exit();
+				//Gdx.app.exit();
+				create(); // make setUp method that does not re-instanciate..?
 				return true;
 			}
 		});
