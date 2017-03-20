@@ -35,7 +35,8 @@ public class Tappy_Race extends ApplicationAdapter {
 	private long countDownTime,raceStartTime;
 	private float raceTime;
 	private boolean gameStarted;
-	private int i = 0;
+	private int i;
+	private int buttonSpacer;
 	private int gameState;
 	private boolean inPreRace, raceComplete;
 	private float carY, deltaY, drag, velocity;
@@ -77,6 +78,7 @@ public class Tappy_Race extends ApplicationAdapter {
 		quit = new Texture("quit.png");
 		backBatch = new SpriteBatch();
 		backGroundSkin = new Actor();backGroundSkin.draw(backBatch, 1f);
+		i = 0; // count for stoplights
 		lights[0] = redLight;
 		lights[1] = yellowLight;
 		lights[2] = greenLight;
@@ -99,11 +101,11 @@ public class Tappy_Race extends ApplicationAdapter {
 		yellowCarButton = new TextButton("", yellowSkin);yellowCarButton.setWidth(200);yellowCarButton.setHeight(200);
 		greenCarButton = new TextButton("", greenSkin);greenCarButton.setWidth(200);greenCarButton.setHeight(200);
 		purpleCarButton = new TextButton("", purpleSkin);purpleCarButton.setWidth(200);purpleCarButton.setHeight(200);
+		buttonSpacer = Gdx.graphics.getWidth()/20;
 
 		Image b = new Image(background);
 		b.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-		int buttonSpacer = Gdx.graphics.getWidth()/20;
 		newGameButton.setPosition(Gdx.graphics.getWidth()/2 - newGameButton.getWidth()/2, Gdx.graphics.getHeight()/2);
 		orangeCarButton.setPosition(buttonSpacer, Gdx.graphics.getHeight()/2.5f);
 		blueCarButton.setPosition(orangeCarButton.getX() + orangeCarButton.getWidth() + buttonSpacer, Gdx.graphics.getHeight()/2.5f);
