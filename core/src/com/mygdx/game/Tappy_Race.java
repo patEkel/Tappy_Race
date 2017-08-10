@@ -122,6 +122,39 @@ public class Tappy_Race extends ApplicationAdapter {
 		addActionListeners();
 	}
 
+	public void replay(){
+		newGameButton.remove();
+		playButton.remove();
+		quitButton.remove();
+		inPreRace = false;
+		gameStarted = false;
+		raceComplete = false;
+		batch = new SpriteBatch();
+		font = new BitmapFont();font.setColor(Color.BLACK); font.getData().setScale(5);
+		carWidth = 0;
+		velocity = 0;
+		gameState = 0;
+		drag = 0;
+
+		countDownTime = 0;
+		raceStartTime = 0;
+		deltaY = 0;
+
+		newGameButton.setPosition(Gdx.graphics.getWidth()/2 - newGameButton.getWidth()/2, Gdx.graphics.getHeight()/2);
+		orangeCarButton.setPosition(buttonSpacer, Gdx.graphics.getHeight()/2.5f);
+		blueCarButton.setPosition(orangeCarButton.getX() + orangeCarButton.getWidth() + buttonSpacer, Gdx.graphics.getHeight()/2.5f);
+		yellowCarButton.setPosition(blueCarButton.getX() + blueCarButton.getWidth() + buttonSpacer, Gdx.graphics.getHeight()/2.5f);
+		greenCarButton.setPosition(yellowCarButton.getX() + yellowCarButton.getWidth() + buttonSpacer, Gdx.graphics.getHeight()/2.5f);
+		purpleCarButton.setPosition(greenCarButton.getX() + greenCarButton.getWidth() + buttonSpacer, Gdx.graphics.getHeight()/2.5f);
+		stage.addActor(newGameButton);
+		stage.addActor(orangeCarButton);
+		stage.addActor(blueCarButton);
+		stage.addActor(yellowCarButton);
+		stage.addActor(greenCarButton);
+		stage.addActor(purpleCarButton);
+		addActionListeners();
+	}
+
 	/**
 	 * Start a new race
 	 */
@@ -187,21 +220,17 @@ public class Tappy_Race extends ApplicationAdapter {
 					gameState = 2;
 				}
 			} else if (gameState == 0) { // user tapped once
-				if (Gdx.input.justTouched()) {
 					velocity = .12f;
 					gameState = 1;
                     carY += velocity;
                     setCarMovement();
                     draw();
-				}
 			} else if (gameState == 2) { // game over
 				raceTime = (TimeUtils.timeSinceNanos(raceStartTime))/1000000000.0f; // seconds ... how to get some decimal places? just concatinate a decimal?
 				raceComplete(); // changes game state to complete
 			}
 		}
 		else if (gameState == 3){// game started = false? menu elements
-//			Gdx.gl.glClearColor(1, 1, 1, 1);
-//			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			//final float raceTime = (TimeUtils.timeSinceNanos(raceStartTime))/1000000000.0f; // seconds ... how to get some decimal places? just concatinate a decimal?
 			raceComplete(); // changes game state to complete
 		}
@@ -404,7 +433,7 @@ public class Tappy_Race extends ApplicationAdapter {
 			{
 				System.out.println("YOU TOUCHED EXIT");
 				//Gdx.app.exit();
-				create(); // make setUp method that does not re-instanciate..?
+				replay();
 				return true;
 			}
 		});
